@@ -2,7 +2,7 @@ const userController = require("../controller/userController");
 const express = require('express');
 const app = express();
 const router =express.Router();
-const Auth = require("../common/authentication");
+// const Auth = require("../common/authentication");
 
 router.post("/Register",userController.Register);
 router.post("/login",userController.Login);
