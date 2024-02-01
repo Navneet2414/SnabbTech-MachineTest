@@ -2,11 +2,16 @@ const model = require("../Model/userSchema")
 const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 const nodemailer = require("nodemailer");
+const emailService = require("../common/nodemailer");
+// const twilio = require('twilio');
+const sendSMS =require("../common/sendSms");
 const randomnumber = require("randomstring");
 
 const config = {
-    userEmail: "ajaat5942362@gmail.com",
-    userPassword: "tanr xdmu uwqk yvhm",
+    // userEmail: "ajaat5942362@gmail.com",
+    // userPassword: "tanr xdmu uwqk yvhm",
+    userEmail: "navneetyadavera@gmail.com",
+        userPassword: "bmym jowj rovc vqod",
     secret: "St4rk_jatt",
   };
 
@@ -115,7 +120,7 @@ module.exports.userInfo = async (req, res, next) => {
     } catch (error) {
         console.log("error", error);
         res.status(500).json({ msg: "Something went wrong", error })
-    }
+    } 
 }
 
 module.exports.updatePassword = async (req, res, next) => {
@@ -154,71 +159,63 @@ module.exports.updatePassword = async (req, res, next) => {
 
 module.exports.ForgetPassword = async (req, res, next) => {
     try {
-      const { email } = req.body;
-  
-      if (!email) {
-        return res.json("Email is Required");
-      }
-  
-      // Check if the email exists in your database
-      const data = await model.findOne({
-        email: { $regex: `^${email}$`, $options: "i" },
-      });
-  
-      if (!data) {
-        return res.status(400).json("This email doesn't exist.");
-      }
-  
-      // Generate a random OTP
-      const OTP = randomnumber.generate({
-        length: 4,
-        charset: "numeric",
-      });
-  
-      // Send OTP via email
-      const mailOptions = {
-        from: config.userEmail,
-        to: email,
-        subject: "Forgot password",
-        text: `Your OTP  : ${OTP}`,
-      };
-  
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com", // Change this to your email service provider
-        port: 587,
-        secure: false,
-        requireTLS: true,
-        auth: {
-          user: config.userEmail, // Change this to your email
-          pass: config.userPassword, // Change this to your email password
-        },
-      });
-  
-      const updateUser = await model.findOneAndUpdate(
-        { email: email },
-        {
-          otp: OTP,
-        },
-        { new: true, runValidators: true, useFindAndModify: false }
-      );
-      console.log(updateUser, "updateUser");
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.error(error, "errro");
-          return res.status(500).json("Failed to send email.");
+        const { email,phoneNo } = req.body;
+        
+
+        if (!email) {
+            return res.json("Email is Required");
         }
-        console.log("Email sent: " + info.response);
-  
-        res.status(200).json({
-          status: true,
-          msg: "OTP has been sent successfully.",
-          data: req.body,
+
+        
+        const data = await model.findOne({
+            email: { $regex: `^${email}$`, $options: "i" },
         });
-      });
+
+        if (!data) {
+            return res.status(400).json("This email doesn't exist.");
+        }
+
+        // Generate a random OTP
+        const OTP = Math.floor(1000 + Math.random() * 9000);
+
+        // Update the user with the OTP
+        const updateUser = await model.findOneAndUpdate(
+            { email: email },
+            { otp: OTP },
+            { new: true, runValidators: true, useFindAndModify: false }
+        );
+        console.log(updateUser, "updateUser");
+        try {
+          await emailService.emailService({ 
+              to: email,
+              subject: 'Forgot password',
+              message: `Your OTP: ${OTP}`,
+          });
+      } catch (error) {
+          console.error('Failed to send email:', error);
+          return res.status(500).json("Failed to send email.");
+      }
+
+        // Send SMS with the OTP
+        try {
+            // await sendSMS(`Your OTP: ${OTP}`, '+916394832414');
+            await sendSMS(`Your OTP: ${OTP}`, `${phoneNo}`);
+            console.log('SMS sent successfully');
+        } catch (error) {
+            console.error('Failed to send SMS:', error);
+        }
+
+        // Respond with success message
+        res.status(200).json({
+            status: true,
+            msg: "OTP has been sent successfully.",
+            data: req.body,
+        });
     } catch (error) {
-      next(error);
+        next(error);
     }
-  };
+};
+
   
   module.exports.VerifyOTP = async (req, res, next) => {
     try {
