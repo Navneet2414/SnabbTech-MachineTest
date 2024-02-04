@@ -12,5 +12,5 @@ const db = require("./common/connection");
 
 
 app.listen(Port,async()=>{
-    console.log(`Server is running on port ${Port}....`);
+    console.log(`Server is running on PORT ${Port}....`);
 })
