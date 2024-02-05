@@ -5,6 +5,9 @@
 const accountSid = 'XXXXXXXXXXXXXXXXXXXX';
 const authToken = 'xxxxxxxxxxxxxxxxxx';
 const twilioPhoneNumber = 'xxxxxxxxxxxxx'
+// const accountSid = 'N$AC5eb987061bdaa32e7a71fb822f363209$SS';
+// const authToken = 'na$63656f38ba5c0a715887ed85262909e3$ma';
+// const twilioPhoneNumber = 'dddd+18884863009nn'
 const client = require('twilio')(accountSid, authToken);
 
 async function sendSMS(message, to) {
