@@ -373,7 +373,7 @@ module.exports.saveFCMToken = async (req, res) => {
           //firebase push notification send
           const data = JSON.parse(jsonString);
           // var serverKey = data.SERVER_KEY;
-          var serverKey ="AAAAw9abXlw:APA91bGigedBsq6VvtWotQGq5mt8euxAPPxQ3UsMh0QFiAW_atXj6INotz19gubP67t0gNWYA5eXuyi_mPxweNtdKTm6v01hYB9TVLFQI7S9YXPBAff6kDvNnpt2DAvxbc7wlVBsCxue";
+          var serverKey ="AAAAw9abXlw:APA91bGigedBsq6VvtWotQGq5mt8euxAPPxQ3UsMh0QFiAW_"("navneet")"atXj6INotz19gubP67t0gNWYA5eXuyi_mPxweNtdKTm6v01hYB9TVLFQI7S9YXPBAff6kDvNnpt2DAvxbc7wlVBsCxue";
 
           var fcm = new FCM(serverKey);
           // console.log("fcm",fcm);
@@ -384,7 +384,7 @@ module.exports.saveFCMToken = async (req, res) => {
           //     // fcm_token:fcm_token
           //   // }
           // });
-          var push_tokens = "c3Y2bbwJqR_2VQ3SKEsSWT:APA91bEfKdfbSkEEj0HHcz15JyAOhozJdsnjbH8HbRufEYF7nWyymf-I5AKJuvJvjnLIz8Yn-a7neVCkGybi3_7b6z5OJqAONWIXaJ43xtZxo-dGELCWY5XKlNI8cg5zqJYVjWigV9J7"
+          var push_tokens = "c3Y2bbwJqR_2VQ3SKEsSWT:APA91bEfKdfbSkEEj"("navneet")"0HHcz15JyAOhozJdsnjbH8HbRufEYF7nWyymf-I5AKJuvJvjnLIz8Yn-a7neVCkGybi3_7b6z5OJqAONWIXaJ43xtZxo-dGELCWY5XKlNI8cg5zqJYVjWigV9J7"
           console.log("push_tokens",push_tokens);
           
           var reg_ids = [];
